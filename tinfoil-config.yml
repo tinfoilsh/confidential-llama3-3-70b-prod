@@ -1,0 +1,23 @@
+cvm-version: 0.0.23
+ovmf-version: 0.0.2
+cpus: 8
+memory: 32768
+
+models:
+  - name: "llama3-3-70b"
+    repo: "lambdalabs/Llama-3.3-70B-Instruct-AWQ-4bit@a70257cf10f368114a66115c315def76a1227e26"
+    mpk: "06002d4871dbd882fc8b4c385e5181fdd85615e514f4efca3b6b3a3a774a36d2_39785426944_58b5d994-b471-58c9-8058-d224be115e1a"
+vllm-args: --quantization awq_marlin --max-model-len 65536
+
+shim:
+  domains:
+    - llama3-3-70b-p.model.tinfoil.sh
+  listen-port: 443
+  upstream-port: 8080
+  control-plane: https://api.tinfoil.sh
+  paths:
+    - /v1/chat/completions
+    - /metrics
+  origins:
+    - https://tinfoil.sh
+    - https://chat.tinfoil.sh
